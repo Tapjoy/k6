@@ -336,6 +336,8 @@ func (h *HTTP) parseRequest(
 				}
 			case "auth":
 				result.Auth = params.Get(k).String()
+			case "aws_service":
+				result.AwsService = params.Get(k).String()
 			case "timeout":
 				result.Timeout = time.Duration(params.Get(k).ToFloat() * float64(time.Millisecond))
 			case "throw":

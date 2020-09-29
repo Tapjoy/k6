@@ -40,6 +40,9 @@ import (
 
 	"github.com/loadimpact/k6/lib"
 	"github.com/loadimpact/k6/stats"
+
+	"github.com/aws/aws-sdk-go/aws/session"
+	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
 )
 
 // HTTPRequestCookie is a representation of a cookie used for request objects
@@ -101,13 +104,14 @@ type Request struct {
 	Cookies map[string][]*HTTPRequestCookie `json:"cookies"`
 }
 
-// ParsedHTTPRequest a represantion of a request after it has been parsed from a user script
+// ParsedHTTPRequest a represention of a request after it has been parsed from a user script
 type ParsedHTTPRequest struct {
 	URL          *URL
 	Body         *bytes.Buffer
 	Req          *http.Request
 	Timeout      time.Duration
 	Auth         string
+	AwsService   string
 	Throw        bool
 	ResponseType ResponseType
 	Compressions []CompressionType
@@ -264,6 +268,12 @@ func MakeRequest(ctx context.Context, preq *ParsedHTTPRequest) (*Response, error
 		transport = digestTransport{originalTransport: transport}
 	} else if preq.Auth == "ntlm" {
 		transport = ntlmssp.Negotiator{RoundTripper: transport}
+	} else if preq.Auth == "awsv4" {
+		var v4SigErr error
+		preq, v4SigErr = awsV4SignRequest(*preq)
+		if v4SigErr != nil {
+			return nil, v4SigErr
+		}
 	}
 
 	resp := &Response{ctx: ctx, URL: preq.URL.URL, Request: *respReq}
@@ -384,4 +394,31 @@ func SetRequestCookies(req *http.Request, jar *cookiejar.Jar, reqCookies map[str
 			req.AddCookie(&http.Cookie{Name: c.Name, Value: c.Value})
 		}
 	}
+}
+
+// awsV4SignRequest signs a request, where the resulting request can authenticate against AWS services
+func awsV4SignRequest(preq ParsedHTTPRequest) (*ParsedHTTPRequest, error) {
+	sess := session.Must(
+		session.NewSessionWithOptions(
+			session.Options{
+				SharedConfigState: session.SharedConfigEnable,
+			}))
+
+	signer := v4.NewSigner(sess.Config.Credentials)
+	signatureHeaders, err := signer.Sign(preq.Req, bytes.NewReader(preq.Body.Bytes()), preq.AwsService, *sess.Config.Region, time.Now())
+
+	if err != nil {
+		return nil, err
+	}
+
+	// http.Header values are []string, so we have to range twice
+	for key, values := range signatureHeaders {
+		if preq.Req.Header.Get(key) == "" {
+			for _, val := range values {
+				preq.Req.Header.Add(key, val)
+			}
+		}
+	}
+
+	return &preq, err
 }
