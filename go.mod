@@ -12,6 +12,7 @@ require (
 	github.com/Soontao/goHttpDigestClient v0.0.0-20170320082612-6d28bb1415c5
 	github.com/andybalholm/brotli v0.0.0-20190704151324-71eb68cc467c
 	github.com/andybalholm/cascadia v1.0.0 // indirect
+	github.com/aws/aws-sdk-go v1.34.33
 	github.com/daaku/go.zipexe v0.0.0-20150329023125-a5fe2436ffcb // indirect
 	github.com/dlclark/regexp2 v1.2.1-0.20200807145002-74bac81f00cf // indirect
 	github.com/dop251/goja v0.0.0-20200831102558-9af81ddcf0e1
@@ -51,7 +52,7 @@ require (
 	github.com/oxtoacart/bpool v0.0.0-20150712133111-4e1c5567d7c2
 	github.com/pierrec/lz4 v1.0.2-0.20171218195038-2fcda4cb7018 // indirect
 	github.com/pierrec/xxHash v0.1.1 // indirect
-	github.com/pkg/errors v0.8.0
+	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/rcrowley/go-metrics v0.0.0-20180503174638-e2704e165165 // indirect
 	github.com/serenize/snaker v0.0.0-20171204205717-a683aaf2d516
