@@ -40,6 +40,11 @@ import (
 
 	"github.com/loadimpact/k6/lib"
 	"github.com/loadimpact/k6/stats"
+
+	"crypto/sha256"
+
+	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
+	"github.com/aws/aws-sdk-go-v2/config"
 )
 
 // HTTPRequestCookie is a representation of a cookie used for request objects
@@ -101,13 +106,14 @@ type Request struct {
 	Cookies map[string][]*HTTPRequestCookie `json:"cookies"`
 }
 
-// ParsedHTTPRequest a represantion of a request after it has been parsed from a user script
+// ParsedHTTPRequest a represention of a request after it has been parsed from a user script
 type ParsedHTTPRequest struct {
 	URL              *URL
 	Body             *bytes.Buffer
 	Req              *http.Request
 	Timeout          time.Duration
 	Auth             string
+	AwsService       string
 	Throw            bool
 	ResponseType     ResponseType
 	ResponseCallback func(int) bool
@@ -291,6 +297,12 @@ func MakeRequest(ctx context.Context, preq *ParsedHTTPRequest) (*Response, error
 			}
 		}
 		transport = ntlmssp.Negotiator{RoundTripper: transport}
+	} else if preq.Auth == "awsv4" {
+		var v4SigErr error
+		preq, v4SigErr = awsV4SignRequest(*preq)
+		if v4SigErr != nil {
+			return nil, v4SigErr
+		}
 	}
 
 	resp := &Response{ctx: ctx, URL: preq.URL.URL, Request: *respReq}
@@ -412,4 +424,25 @@ func SetRequestCookies(req *http.Request, jar *cookiejar.Jar, reqCookies map[str
 			req.AddCookie(&http.Cookie{Name: c.Name, Value: c.Value})
 		}
 	}
+}
+
+// awsV4SignRequest signs a request, where the resulting request can authenticate against AWS services
+func awsV4SignRequest(preq ParsedHTTPRequest) (*ParsedHTTPRequest, error) {
+	cfg, err := config.LoadDefaultConfig(context.TODO())
+	if err != nil {
+		return &ParsedHTTPRequest{}, err
+	}
+
+	creds, err := cfg.Credentials.Retrieve(context.TODO())
+	if err != nil {
+		return &ParsedHTTPRequest{}, err
+	}
+
+	signer := v4.NewSigner(func(signer *v4.SignerOptions) {})
+	err = signer.SignHTTP(context.TODO(), creds, preq.Req, fmt.Sprintf("%x", sha256.Sum256(preq.Body.Bytes())), preq.AwsService, cfg.Region, time.Now())
+	if err != nil {
+		return &ParsedHTTPRequest{}, err
+	}
+
+	return &preq, err
 }

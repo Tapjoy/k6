@@ -337,6 +337,8 @@ func (h *HTTP) parseRequest(
 				}
 			case "auth":
 				result.Auth = params.Get(k).String()
+			case "aws_service":
+				result.AwsService = params.Get(k).String()
 			case "timeout":
 				t, err := types.GetDurationValue(params.Get(k).Export())
 				if err != nil {
