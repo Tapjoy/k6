@@ -9,6 +9,8 @@ require (
 	github.com/PuerkitoBio/goquery v1.6.1
 	github.com/Soontao/goHttpDigestClient v0.0.0-20170320082612-6d28bb1415c5
 	github.com/andybalholm/brotli v1.0.1
+	github.com/aws/aws-sdk-go-v2 v1.3.1
+	github.com/aws/aws-sdk-go-v2/config v1.1.4
 	github.com/dop251/goja v0.0.0-20210317175251-bb14c2267b76
 	github.com/dustin/go-humanize v0.0.0-20171111073723-bb3d318650d4
 	github.com/fatih/color v1.10.0
