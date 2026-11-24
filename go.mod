@@ -40,10 +40,9 @@ require (
 	github.com/tidwall/gjson v1.7.4
 	github.com/tidwall/pretty v1.1.0
 	github.com/zyedidia/highlight v0.0.0-20170330143449-201131ce5cf5
-	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897
-	golang.org/x/net v0.0.0-20201209123823-ac852fbbde11
-	golang.org/x/sys v0.0.0-20201204225414-ed752295db88 // indirect
-	golang.org/x/text v0.3.4
+	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
+	golang.org/x/net v0.0.0-20220722155237-a158d28d115b
+	golang.org/x/text v0.3.8
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba
 	google.golang.org/grpc v1.36.1
 	google.golang.org/protobuf v1.25.1-0.20200805231151-a709e31e5d12
