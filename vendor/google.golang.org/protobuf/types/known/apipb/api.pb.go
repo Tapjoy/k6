@@ -82,8 +82,6 @@ type Api struct {
 	// `google.feature.v1`. For major versions 0 and 1, the suffix can
 	// be omitted. Zero major versions must only be used for
 	// experimental, non-GA interfaces.
-	//
-	//
 	Version string `protobuf:"bytes,4,opt,name=version,proto3" json:"version,omitempty"`
 	// Source context for the protocol buffer service represented by this
 	// message.
@@ -172,7 +170,7 @@ func (x *Api) GetSyntax() typepb.Syntax {
 	if x != nil {
 		return x.Syntax
 	}
-	return typepb.Syntax_SYNTAX_PROTO2
+	return typepb.Syntax(0)
 }
 
 // Method represents a method of an API interface.
@@ -275,52 +273,52 @@ func (x *Method) GetSyntax() typepb.Syntax {
 	if x != nil {
 		return x.Syntax
 	}
-	return typepb.Syntax_SYNTAX_PROTO2
+	return typepb.Syntax(0)
 }
 
 // Declares an API Interface to be included in this interface. The including
 // interface must redeclare all the methods from the included interface, but
 // documentation and options are inherited as follows:
 //
-// - If after comment and whitespace stripping, the documentation
-//   string of the redeclared method is empty, it will be inherited
-//   from the original method.
+//   - If after comment and whitespace stripping, the documentation
+//     string of the redeclared method is empty, it will be inherited
+//     from the original method.
 //
-// - Each annotation belonging to the service config (http,
-//   visibility) which is not set in the redeclared method will be
-//   inherited.
+//   - Each annotation belonging to the service config (http,
+//     visibility) which is not set in the redeclared method will be
+//     inherited.
 //
-// - If an http annotation is inherited, the path pattern will be
-//   modified as follows. Any version prefix will be replaced by the
-//   version of the including interface plus the [root][] path if
-//   specified.
+//   - If an http annotation is inherited, the path pattern will be
+//     modified as follows. Any version prefix will be replaced by the
+//     version of the including interface plus the [root][] path if
+//     specified.
 //
 // Example of a simple mixin:
 //
-//     package google.acl.v1;
-//     service AccessControl {
-//       // Get the underlying ACL object.
-//       rpc GetAcl(GetAclRequest) returns (Acl) {
-//         option (google.api.http).get = "/v1/{resource=**}:getAcl";
-//       }
-//     }
+//	package google.acl.v1;
+//	service AccessControl {
+//	  // Get the underlying ACL object.
+//	  rpc GetAcl(GetAclRequest) returns (Acl) {
+//	    option (google.api.http).get = "/v1/{resource=**}:getAcl";
+//	  }
+//	}
 //
-//     package google.storage.v2;
-//     service Storage {
-//       rpc GetAcl(GetAclRequest) returns (Acl);
+//	package google.storage.v2;
+//	service Storage {
+//	  rpc GetAcl(GetAclRequest) returns (Acl);
 //
-//       // Get a data record.
-//       rpc GetData(GetDataRequest) returns (Data) {
-//         option (google.api.http).get = "/v2/{resource=**}";
-//       }
-//     }
+//	  // Get a data record.
+//	  rpc GetData(GetDataRequest) returns (Data) {
+//	    option (google.api.http).get = "/v2/{resource=**}";
+//	  }
+//	}
 //
 // Example of a mixin configuration:
 //
-//     apis:
-//     - name: google.storage.v2.Storage
-//       mixins:
-//       - name: google.acl.v1.AccessControl
+//	apis:
+//	- name: google.storage.v2.Storage
+//	  mixins:
+//	  - name: google.acl.v1.AccessControl
 //
 // The mixin construct implies that all methods in `AccessControl` are
 // also declared with same name and request/response types in
@@ -328,34 +326,34 @@ func (x *Method) GetSyntax() typepb.Syntax {
 // see the effective `Storage.GetAcl` method after inherting
 // documentation and annotations as follows:
 //
-//     service Storage {
-//       // Get the underlying ACL object.
-//       rpc GetAcl(GetAclRequest) returns (Acl) {
-//         option (google.api.http).get = "/v2/{resource=**}:getAcl";
-//       }
-//       ...
-//     }
+//	service Storage {
+//	  // Get the underlying ACL object.
+//	  rpc GetAcl(GetAclRequest) returns (Acl) {
+//	    option (google.api.http).get = "/v2/{resource=**}:getAcl";
+//	  }
+//	  ...
+//	}
 //
 // Note how the version in the path pattern changed from `v1` to `v2`.
 //
 // If the `root` field in the mixin is specified, it should be a
 // relative path under which inherited HTTP paths are placed. Example:
 //
-//     apis:
-//     - name: google.storage.v2.Storage
-//       mixins:
-//       - name: google.acl.v1.AccessControl
-//         root: acls
+//	apis:
+//	- name: google.storage.v2.Storage
+//	  mixins:
+//	  - name: google.acl.v1.AccessControl
+//	    root: acls
 //
 // This implies the following inherited HTTP annotation:
 //
-//     service Storage {
-//       // Get the underlying ACL object.
-//       rpc GetAcl(GetAclRequest) returns (Acl) {
-//         option (google.api.http).get = "/v2/acls/{resource=**}:getAcl";
-//       }
-//       ...
-//     }
+//	service Storage {
+//	  // Get the underlying ACL object.
+//	  rpc GetAcl(GetAclRequest) returns (Acl) {
+//	    option (google.api.http).get = "/v2/acls/{resource=**}:getAcl";
+//	  }
+//	  ...
+//	}
 type Mixin struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -466,15 +464,15 @@ var file_google_protobuf_api_proto_rawDesc = []byte{
 	0x06, 0x73, 0x79, 0x6e, 0x74, 0x61, 0x78, 0x22, 0x2f, 0x0a, 0x05, 0x4d, 0x69, 0x78, 0x69, 0x6e,
 	0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
 	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x72, 0x6f, 0x6f, 0x74, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x04, 0x72, 0x6f, 0x6f, 0x74, 0x42, 0x75, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e,
+	0x28, 0x09, 0x52, 0x04, 0x72, 0x6f, 0x6f, 0x74, 0x42, 0x76, 0x0a, 0x13, 0x63, 0x6f, 0x6d, 0x2e,
 	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x42,
-	0x08, 0x41, 0x70, 0x69, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2b, 0x67, 0x6f, 0x6f,
-	0x67, 0x6c, 0x65, 0x2e, 0x67, 0x6f, 0x6c, 0x61, 0x6e, 0x67, 0x2e, 0x6f, 0x72, 0x67, 0x2f, 0x67,
-	0x65, 0x6e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2f, 0x61, 0x70, 0x69, 0x3b, 0x61, 0x70, 0x69, 0xa2, 0x02, 0x03, 0x47, 0x50, 0x42, 0xaa, 0x02,
-	0x1e, 0x47, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x57, 0x65, 0x6c, 0x6c, 0x4b, 0x6e, 0x6f, 0x77, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x73, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x08, 0x41, 0x70, 0x69, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2c, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x67, 0x6f, 0x6c, 0x61, 0x6e, 0x67, 0x2e, 0x6f, 0x72, 0x67, 0x2f, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2f, 0x6b, 0x6e,
+	0x6f, 0x77, 0x6e, 0x2f, 0x61, 0x70, 0x69, 0x70, 0x62, 0xa2, 0x02, 0x03, 0x47, 0x50, 0x42, 0xaa,
+	0x02, 0x1e, 0x47, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
+	0x66, 0x2e, 0x57, 0x65, 0x6c, 0x6c, 0x4b, 0x6e, 0x6f, 0x77, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x73,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

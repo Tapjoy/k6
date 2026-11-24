@@ -12,7 +12,7 @@ require (
 	github.com/dop251/goja v0.0.0-20210317175251-bb14c2267b76
 	github.com/dustin/go-humanize v0.0.0-20171111073723-bb3d318650d4
 	github.com/fatih/color v1.10.0
-	github.com/golang/protobuf v1.4.2
+	github.com/golang/protobuf v1.5.0
 	github.com/gorilla/websocket v1.4.2
 	github.com/influxdata/influxdb1-client v0.0.0-20190402204710-8ff2fc3824fc
 	github.com/jhump/protoreflect v1.8.2
@@ -46,7 +46,7 @@ require (
 	golang.org/x/text v0.3.4
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba
 	google.golang.org/grpc v1.36.1
-	google.golang.org/protobuf v1.25.1-0.20200805231151-a709e31e5d12
+	google.golang.org/protobuf v1.33.0
 	gopkg.in/guregu/null.v3 v3.3.0
 	gopkg.in/yaml.v2 v2.4.0
 )
