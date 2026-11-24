@@ -37,8 +37,8 @@ require (
 	github.com/spf13/cobra v1.1.3
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.7.0
-	github.com/tidwall/gjson v1.7.4
-	github.com/tidwall/pretty v1.1.0
+	github.com/tidwall/gjson v1.9.3
+	github.com/tidwall/pretty v1.2.0
 	github.com/zyedidia/highlight v0.0.0-20170330143449-201131ce5cf5
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897
 	golang.org/x/net v0.0.0-20201209123823-ac852fbbde11
